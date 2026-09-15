@@ -129,7 +129,20 @@ reference/               validation methodology + published Figure-2 inputs
 - **Data license:** CRSP and Compustat data may not be redistributed. This package
   contains code and published-paper aggregates only.
 
-## 7. Provenance
+## 7. Optional stage: Table 7 — expected net (simple) returns
+
+After `run_all.do`, `stata-mp -b do run_table7.do` estimates the paper's Section 4.4
+calibration: a constrained nonlinear SUR per FF48 industry x expanding window that adds a
+level-return equation and identifies `A = exp(sigma^2/2)`, giving expected NET returns
+`E[R] = A*exp(mu)-1`. It then sorts portfolios on the expected simple return. Runtime:
+~45-75 minutes single-threaded (see the header for how to shard). Validation targets are
+printed at the end (Panel A: A 1.0346, kappa 0.9767, omega 0.7230, mu 0.0116 — exact on
+the frozen 2014 data; ER-sorted simple-return decile hedge 0.0594/q (t=8.3) market-adjusted
+on the 2026 fresh pull). Note the published Table 7 uses the RAW-regressor NLSUR spec
+(only the level dependent variable winsorized within window); `est_er`'s last argument
+switches to the winsorized-regressor variant.
+
+## 8. Provenance
 
 Package assembled 2026-09 from the rationalized replication codebase, which was validated
 in two stages: (i) against the frozen March-2014 estimation outputs (float-exact
