@@ -22,9 +22,10 @@ program define psort_u
 
     *** horizon truncation quarters implied by the returns cutoff
     local cutq = qofd(td($RET_CUTOFF))
-    local t12 = `cutq' - 3    // first formation quarter whose 12m window passes the cutoff
-    local t24 = `cutq' - 7
-    local t36 = `cutq' - 11
+    local tr3  = `cutq'        // first formation quarter whose 3m window passes the cutoff
+    local tr12 = `cutq' - 3    // ... 12m window ...
+    local tr24 = `cutq' - 7
+    local tr36 = `cutq' - 11
 
     foreach x in "" _iv {
         foreach y in q5 q10 {
@@ -79,9 +80,10 @@ program define psort_u
                 keep if inlist(quantile, 1, `top')
                 collapse (sum) dbhar* dbhsar* ldbhar* ldbhsar*, by(yearquarter)
                 foreach v in dbhar dbhsar ldbhar ldbhsar {
-                    replace `v'_12 = . if yearquarter >= `t12'
-                    replace `v'_24 = . if yearquarter >= `t24'
-                    replace `v'_36 = . if yearquarter >= `t36'
+                    replace `v'_3  = . if yearquarter >= `tr3'
+                    replace `v'_12 = . if yearquarter >= `tr12'
+                    replace `v'_24 = . if yearquarter >= `tr24'
+                    replace `v'_36 = . if yearquarter >= `tr36'
                 }
                 save "`outdir'/hedgeret_15yr_`y'`ind'_match_roemodel_`med'lroe`x'`w'_`tag'.dta", replace
                 restore
