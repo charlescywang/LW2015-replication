@@ -1,0 +1,11 @@
+# WRDS pulls and generated outputs — never commit data (CRSP/Compustat license)
+data/*
+!data/.gitkeep
+out/*
+!out/hedge/.gitkeep
+*.log
+*.dta
+*.sas7bdat
+.DS_Store
+__pycache__/
+*.pyc
